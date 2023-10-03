@@ -1,17 +1,16 @@
-// bet.js
-class Bet {
-    constructor(id, stake, odds, tipper, date, sport, league, result, type) {
-      this.id = id;
-      this.stake = stake;
-      this.odds = odds;
-      this.tipper = tipper;
-      this.date = date;
-      this.sport = sport;
-      this.league = league;
-      this.result = result;
-      this.type = type;
-    }
-  }
-  
-  module.exports = Bet;
-  
+const mongoose = require('mongoose');
+
+const betSchema = new mongoose.Schema({
+  stake: Number,
+  odds: Number,
+  tipper: String,
+  date: Date,
+  sport: String,
+  league: String,
+  result: String,
+  type: String,
+});
+
+const Bet = mongoose.model('Bet', betSchema);
+
+module.exports = Bet;

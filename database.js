@@ -1,61 +1,34 @@
-const { Pool } = require("pg");
+const mongoose = require('mongoose');
 
-const pool = new Pool({
-  user: "postgres",
-  password: "Qetu1357!",
-  host: "localhost",
-  port: 5432,
-  database: "bet_tracker", // Use the "bet_tracker" database
+const mongoURI = 'mongodb+srv://SA:qetu1357@cluster0.u5ghvtv.mongodb.net/?retryWrites=true&w=majority';
+
+const connectDB = async () => {
+    try {
+        await mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
+        console.log('MongoDB connected successfully');
+    } catch (err) {
+        console.error('MongoDB connection error:', err);
+    }
+};
+
+const betSchema = new mongoose.Schema({
+    stake: Number,
+    odds: Number,
+    tipper: String,
+    date: Date,
+    sport: String,
+    league: String,
+    result: String,
+    type: String
 });
 
-// Define the table schema for the new "bets" table
-const createTableQuery = `
-  CREATE TABLE IF NOT EXISTS bets (
-    id SERIAL PRIMARY KEY,
-    stake DECIMAL,
-    odds DECIMAL,
-    tipper VARCHAR(255),
-    date DATE,
-    sport VARCHAR(255),
-    league VARCHAR(255),
-    result VARCHAR(255),
-    type VARCHAR(255)
-  );`;
+const Bet = mongoose.model('Bet', betSchema);
+const PendingBet = mongoose.model('PendingBet', betSchema);
 
-pool
-  .query(createTableQuery)
-  .then(() => {
-    console.log("Bets table created successfully");
-  })
-  .catch((err) => {
-    console.error("Error creating the bets table:", err);
-  });
-
-  // ... existing code ...
-
-const createPendingBetsTableQuery = `
-CREATE TABLE IF NOT EXISTS pending_bets (
-  id SERIAL PRIMARY KEY,
-  stake DECIMAL,
-  odds DECIMAL,
-  tipper VARCHAR(255),
-  date DATE,
-  sport VARCHAR(255),
-  league VARCHAR(255),
-  result VARCHAR(255),
-  type VARCHAR(255)
-);`;
-
-pool
-.query(createPendingBetsTableQuery)
-.then(() => {
-  console.log("Pending bets table created successfully");
-})
-.catch((err) => {
-  console.error("Error creating the pending bets table:", err);
-});
-
-// ... existing code ...
-
-
-module.exports = pool;
+module.exports = {
+    connectDB,
+    models: {
+        Bet,
+        PendingBet
+    }
+};
