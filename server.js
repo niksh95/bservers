@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { connectDB } = require("./database.js"); // Import DB connection
+const { connectDB } = require("./database.js");
 
 const app = express();
 const betsRouter = require("./apis/bets");
@@ -11,7 +11,5 @@ app.use(cors());
 app.use("/bets", betsRouter);
 app.use("/pendingbets", pendingBetsRouter);
 
-// Connect to DB and then start the server
-connectDB().then(() => {
-    app.listen(4000, () => console.log("Server on localhost:4000"));
-});
+// Export the app for Vercel
+module.exports = app;
