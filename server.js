@@ -3,8 +3,8 @@ const cors = require("cors");
 const { connectDB } = require("./database.js");
 
 const app = express();
-const betsRouter = require(".pages/api/bets");
-const pendingBetsRouter = require(".pages/api/pendingBets"); 
+const betsRouter = require("./pages/api/bets");
+const pendingBetsRouter = require("./pages/api/pendingBets"); 
 
 app.use(express.json());
 app.use(cors());
